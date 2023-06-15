@@ -134,6 +134,7 @@ public:
     // вместимость вектора должна увеличиться вдвое, а для вектора вместимостью 0 стать равной 1
     //  Обеспечивает базовую гарантию безопасности исключений.
     Iterator Insert(ConstIterator pos, Type value) {
+        assert(pos >= begin() && pos <= end());
         auto new_pos = pos - begin();
         auto old_size = size_;
         Resize(size_ + 1);
@@ -153,6 +154,7 @@ public:
     // Обеспечивает базовую гарантию безопасности исключений.
     // Принимает итератор, указывающий на удаляемый элемент вектора, и возвращает итератор, который ссылается на элемент, следующий за удалённым:
     Iterator Erase(ConstIterator pos) {
+        assert(pos >= begin() && pos < end());
         auto new_pos = pos - begin();
         std::move(ptr_.Get() + new_pos + 1, end(), ptr_.Get() + new_pos);
         //std::copy(ptr_.Get() + new_pos + 1, end(), ptr_.Get() + new_pos);
@@ -189,12 +191,14 @@ public:
 
     // Возвращает ссылку на элемент с индексом index
     Type& operator[](size_t index) noexcept {
+        assert(index < size_);
         return ptr_[index];
     }
 
     // Возвращает константную ссылку на элемент с индексом index
     const Type& operator[](size_t index) const noexcept {
-         return ptr_[index];
+        assert(index < size_);
+        return ptr_[index];
     }
 
     // Возвращает константную ссылку на элемент с индексом index
